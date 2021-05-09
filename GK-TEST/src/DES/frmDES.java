@@ -20,15 +20,37 @@ public class frmDES extends javax.swing.JFrame {
     public frmDES() {
         initComponents();
         String[] stubResultEboxes = {"0","1","1","0","1","0","1","1","0","1","0","1","0","0","0","1","1","1","0","1","0","0","1","0","1","1","0","0","1","1","0","0",
+     
+        String a = "0111010100101000011110000011100101110100100100111100101101110000";
+        String[] s = a.split("");
+        String[] PC1 = PC1Performed(s);
+        setCD(PC1);
+        System.out.println("------------------------------------------------");
+        String[] C = CDNumber( C0,6);
+        String[] D = CDNumber( D0,6);
+        System.out.println(Arrays.toString(keyNumber(C, D)));
+        /*
+        String a = "1001001";
+        String[] s= a.split("");
+       System.out.println(Arrays.toString(s));
+        System.out.println(Arrays.toString(shift1(s)));
+        */
+        
+        
+        
+       /* String[] stubResultEboxes = {"0","1","1","0","1","0","1","1","0","1","0","1","0","0","0","1","1","1","0","1","0","0","1","0","1","1","0","0","1","1","0","0",
         "1","0","1","1","0","1","1","0","0","0","0","1","1","0","1","0"};
         
         String[] sBoxesStub = sBoxesPerform(stubResultEboxes);
         String[] pBoxesStub = pBoxesPerform(sBoxesStub);
         RPTFinal(pBoxesStub);
+        */
     }
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
     String[] swapRPT = new String[32];
+    String[] C0 = new String[28];
+    String[] D0 = new String[28];
     final int[][] SBOX_0 = {
         {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
         {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8},
@@ -80,6 +102,18 @@ public class frmDES extends javax.swing.JFrame {
     final int[] P_BOX = {
         16,7,20,21,29,12,28,17,1,15,23,26,5,18,31,10,2,8,24,14,32,27,3,9,19,13,30,
         6,22,11,4,25
+    };
+    final int[] IP ={
+        58,50,42,34,26,18,10,2,60,52,44,36,28,20,12,4,62,54,46,38,30,22,16,6,64,56,48,40,32,24,16,8,57,49,41,33,25,17,9,1,
+        59,51,43,35,27,19,11,3,61,53,45,37,29,21,13,5,63,55,47,39,31,23,15,7
+    };
+    final int[] PC1 ={
+        57,49,41,33,25,17,9,1,58,50,42,34,26,18,10,2,59,51,43,35,27,19,11,3,60,52,
+        44,36,63,55,47,39,31,23,15,7,62,54,46,38,30,22,14,6,61,53,45,37,29,21,13,5,28,20,12,4
+    };
+    final int[] PC2 ={
+       14,17,11,24,1,5,3,28,15,6,21,10,23,19,12,4,26,8,16,7,27,20,13,2,
+        41,52,31,37,47,55,30,40,51,45,33,48,44,49,39,56,34,53,46,42,50,36,29,32
     };
     private void RPTFinal(String[] pBoxResult)
     {
@@ -238,6 +272,104 @@ public class frmDES extends javax.swing.JFrame {
         return  result;
     }
     // </editor-fold> 
+    //Dau
+    private String[] IPPerformed (String[] plainText){
+        String[] result = new String[64];
+        for (int i = 0; i <IP.length; i++) {
+            int index = IP[i]-1;
+            result[i] = plainText[index];
+        }
+        return result;
+        
+    }
+    private String[] PC1Performed (String[] key)
+    {
+        String[] result = new String[56];
+           for (int i = 0; i <PC1.length; i++) {
+            int index = PC1[i]-1;
+            result[i] = key[index];
+        }
+        return result;
+    }
+     private String[] PC2Performed (String[] key)
+    {
+        String[] result = new String[48];
+           for (int i = 0; i <PC2.length; i++) {
+            int index = PC2[i]-1;
+            result[i] = key[index];
+        }
+        return result;
+    }
+    private void setCD(String[] PC1){
+        int j = 0;
+        for (int i = 0; i < PC1.length; i++) {
+            if(i<28)
+                C0[i] = PC1[i];
+            else{
+            D0[j] = PC1[i];
+            j++;
+            }
+        }
+    }
+    private String[] merge(String[] C,String[] D)
+    {
+        int j =0;
+        String[] result = new String[56];
+        for (int i = 0; i < 56; i++) {
+            if(i<28)
+            result[i] = C[i];
+            else
+            {
+                result[i] = D[j];
+                j++;
+            }
+        }
+        return result;
+    }
+    private String[] CDNumber(String[] CD,int index){
+        String[] CDPre = new String[28];
+        CDPre = CD;
+        for (int i = 1; i <= index; i++) {
+              CDPre = shiftCD(CDPre, i);
+        }
+        return CDPre;
+    }
+    private String[] keyNumber(String[] CNumber,String[] DNumber)
+    {
+        String[] key56 = new String[56];
+        key56 =  merge(CNumber, DNumber);
+        String[] key48 = new String[48];
+        key48 = PC2Performed(key56);
+        return key48;
+    }
+ 
+    private String[] shiftCD(String[] CD,int index)
+    {
+        String[] result = new String[28];
+        if(index == 1 || index == 2|| index == 9 || index==16)
+        {
+            result = shift1(CD);         
+        }
+        else
+        {
+            result = shift2(CD);
+        }
+        return result;
+    }
+   
+            
+    private String[] shift1(String[] s){
+        String[] result = new String[s.length];
+        
+        for (int i = 0; i < s.length-1 ; i++) {
+            result[i] = s[i+1];
+        }
+        result[s.length-1] = s[0];;
+        return result;
+    }
+     private String[] shift2(String[] s){
+         return   shift1(shift1(s));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
