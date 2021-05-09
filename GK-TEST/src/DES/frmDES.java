@@ -20,7 +20,7 @@ public class frmDES extends javax.swing.JFrame {
     public frmDES() {
         initComponents();
         
-        String a = "0110100001100101011011000110110001101111011100110111001101110011";
+        String a = "0111010100101000011110000011100101110100100100111100101101110000";
         String[] s = a.split("");
         String[] IP = IPPerformed(s);
         twoHavlesPT(IP);
@@ -30,7 +30,6 @@ public class frmDES extends javax.swing.JFrame {
         String[] C = CDNumber(C0,1);
         String[] D = CDNumber(C0,1);
         String key = convertArray(keyNumber(C, D));
-        
         String xa = EboxXorKey(EBoxPerform(), key);
         String[] SboxResult = sBoxesPerform(xa.split(""));
         String[] PBoxResult = pBoxesPerform(SboxResult);
@@ -65,24 +64,7 @@ public class frmDES extends javax.swing.JFrame {
         String[] pBoxesStub = pBoxesPerform(sBoxesStub);
         RPTFinal(pBoxesStub);
         */
-       String a = "0110100001100101011011000110110001101111011100110111001101110011";
-        String[] s = a.split("");
-        String[] IP = IPPerformed(s);
-        twoHavlesPT(IP);
-        String[] pc1 =PC1Performed(s);
-        setCD(pc1);
-      
-        String[] C = CDNumber(C0,1);
-        String[] D = CDNumber(C0,1);
-        String key = convertArray(keyNumber(C, D));
-        
-        String xa = EboxXorKey(EBoxPerform(), key);
-        String[] SboxResult = sBoxesPerform(xa.split(""));
-        String[] PBoxResult = pBoxesPerform(SboxResult);
-        RPTFinal(PBoxResult);
-        swapLeftAndRightPlainText();
-        
-        String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
+     
         System.out.println(cipher);
 
     }
@@ -301,7 +283,7 @@ public class frmDES extends javax.swing.JFrame {
                                    28,29,30,31,32, 1};
        for(int i : eBoxTable){
            result += RPT[i-1];
-           result += RPT[i -1];
+         
        }
        return result;
     }
@@ -354,11 +336,11 @@ public class frmDES extends javax.swing.JFrame {
     }
     private String[] merge(String[] C,String[] D)
     {
-        int j =0;
+      
         String[] result = new String[C.length + D.length];
         for (int i = 0; i < (C.length + D.length) /2 ; i++) {
-            result[i] += C[i];
-            result[ C.length + i ] += D[i]; 
+            result[i] = C[i];
+            result[ C.length + i ] = D[i]; 
         }
         return result;
     }
@@ -416,13 +398,7 @@ public class frmDES extends javax.swing.JFrame {
      private String[] shift2(String[] s){
          return   shift1(shift1(s));
     }
-     private String convertArray(String[] Array){
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < Array.length; i++) {
-            s.append(Array[i]);
-        }
-        return s.toString();
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
