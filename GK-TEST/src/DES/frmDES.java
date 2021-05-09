@@ -188,6 +188,56 @@ public class frmDES extends javax.swing.JFrame {
         };
         return binaryReturn;
     }
+    // <editor-fold defaultstate="collapsed" desc="Tri">  
+    
+    private void swapLeftAndRightPlainText(){
+        String temp;
+        for(int i = 0; i < 32; i++){
+            temp = LPT[i];
+            LPT[i] = RPT[i];
+            RPT[i] = temp;
+        }
+    }
+    private String finalPermutationPerform(String round16Result){
+        String result = "";
+        int[] finalPermutaionTable = new int[]{
+                                    40,8,48,16,56,24,64,32,
+                                    39,7,47,15,55,23,63,31,
+                                    38,6,46,14,54,22,62,30,
+                                    37,5,45,13,53,21,61,29,
+                                    36,4,44,12,52,20,60,28,
+                                    35,3,43,11,51,19,59,27,
+                                    34,2,42,10,50,18,58,26,
+                                    33,1,41, 9,49,17,57,25};
+        for(int i : finalPermutaionTable){
+            result += round16Result.charAt(i);
+        }
+        return result;
+    }
+    private String EBoxPerform(){
+       String result = "";
+       int[] eBoxTable = new int[]{
+                                   32, 1, 2, 3, 4, 5,
+                                    4, 5, 6, 7, 8, 9,
+                                    8, 9,10,11,12,13,
+                                   12,13,14,15,16,17,
+                                   16,17,18,19,20,21,
+                                   20,21,22,23,24,25,
+                                   24,25,26,27,28,29,
+                                   28,29,30,31,32, 1};
+       for(int i : eBoxTable){
+           result += RPT[i];
+       }
+       return result;
+    }
+    private String EboxXorKey(String eboxResult, String key){
+        String result = "";
+        for(int i = 0; i < 48; i++){
+            result += XOR(String.valueOf(eboxResult.charAt(i)) , String.valueOf(key.charAt(i)));
+        }
+        return  result;
+    }
+    // </editor-fold> 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
