@@ -19,52 +19,15 @@ public class frmDES extends javax.swing.JFrame {
      */
     public frmDES() {
         initComponents();
-        
-        String a = "0111010100101000011110000011100101110100100100111100101101110000";
+        String a = "0110100001100101011011000110110001101111011100110111001101110011";
         String[] s = a.split("");
         String[] IP = IPPerformed(s);
         twoHavlesPT(IP);
         String[] pc1 =PC1Performed(s);
         setCD(pc1);
-      
-        String[] C = CDNumber(C0,1);
-        String[] D = CDNumber(C0,1);
-        String key = convertArray(keyNumber(C, D));
-        String xa = EboxXorKey(EBoxPerform(), key);
-        String[] SboxResult = sBoxesPerform(xa.split(""));
-        String[] PBoxResult = pBoxesPerform(SboxResult);
-        RPTFinal(PBoxResult);
+        Round();
         swapLeftAndRightPlainText();
-        
         String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
-        System.out.println(cipher);
-//        String[] stubResultEboxes = {"0","1","1","0","1","0","1","1","0","1","0","1","0","0","0","1","1","1","0","1","0","0","1","0","1","1","0","0","1","1","0","0",};
-//     
-//        String a = "0111010100101000011110000011100101110100100100111100101101110000";
-//        String[] s = a.split("");
-//        String[] PC1 = PC1Performed(s);
-//        setCD(PC1);
-//        System.out.println("------------------------------------------------");
-//        String[] C = CDNumber( C0,6);
-//        String[] D = CDNumber( D0,6);
-//        System.out.println(Arrays.toString(keyNumber(C, D)));
-        /*
-        String a = "1001001";
-        String[] s= a.split("");
-       System.out.println(Arrays.toString(s));
-        System.out.println(Arrays.toString(shift1(s)));
-        */
-        
-        
-        
-       /* String[] stubResultEboxes = {"0","1","1","0","1","0","1","1","0","1","0","1","0","0","0","1","1","1","0","1","0","0","1","0","1","1","0","0","1","1","0","0",
-        "1","0","1","1","0","1","1","0","0","0","0","1","1","0","1","0"};
-        
-        String[] sBoxesStub = sBoxesPerform(stubResultEboxes);
-        String[] pBoxesStub = pBoxesPerform(sBoxesStub);
-        RPTFinal(pBoxesStub);
-        */
-     
         System.out.println(cipher);
 
     }
@@ -143,6 +106,18 @@ public class frmDES extends javax.swing.JFrame {
             RPT[i] = XOR(pBoxResult[i], LPT[i]);
         }
     }
+    private void Round(){
+         for (int i = 1; i <= 16; i++) {
+             String[] C = CDNumber(C0,i);
+         String[] D = CDNumber(C0,i);
+         String key = convertArray(keyNumber(C, D));
+         String resultEboxXorKey = EboxXorKey(EBoxPerform(), key);
+        String[] SboxResult = sBoxesPerform(resultEboxXorKey.split(""));
+        String[] PBoxResult = pBoxesPerform(SboxResult);
+        RPTFinal(PBoxResult);
+        LPT= swapRPT;
+        }
+    }
     private String[] sBoxesPerform(String[] eBoxesResult){
         String[] resultSBoxes = new String[32];
         int currentIndexResult = 0;
@@ -211,6 +186,7 @@ public class frmDES extends javax.swing.JFrame {
             LPT[i] = ipResult[i];
             RPT[i] = ipResult[i+32];
         }
+        
         swapRPT = RPT;
     }
     
