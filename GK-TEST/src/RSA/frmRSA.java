@@ -183,7 +183,15 @@ public class frmRSA extends javax.swing.JFrame {
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDecryptActionPerformed
-
+    private int calculateD(int e, int n){
+        int i = 0;
+        while (true) {            
+            if((i * n + 1) % e == 0){
+                return (i * n + 1) /e;
+            }
+            i++;
+        }
+    }
     /**
      * @param args the command line arguments
      */
