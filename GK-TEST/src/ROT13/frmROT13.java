@@ -4,6 +4,17 @@
  * and open the template in the editor.
  */
 package ROT13;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Formatter;
+import java.util.List;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,8 +27,9 @@ public class frmROT13 extends javax.swing.JFrame {
      */
     public frmROT13() {
         initComponents();
+        readFile();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,22 +39,176 @@ public class frmROT13 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        txtPlainText = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtCipherText = new javax.swing.JTextField();
+        btnAction = new javax.swing.JButton();
+        btnAction1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("PlainText");
+
+        jLabel2.setText("CipherText");
+
+        btnAction.setText("Action");
+        btnAction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionActionPerformed(evt);
+            }
+        });
+
+        btnAction1.setText("Save");
+        btnAction1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAction1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAction, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCipherText, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))))
+                .addContainerGap(96, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnAction1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtCipherText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnAction)
+                .addGap(37, 37, 37)
+                .addComponent(btnAction1)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionActionPerformed
+         txtCipherText.setText(cipherText(txtPlainText.getText()));
+      
+    }//GEN-LAST:event_btnActionActionPerformed
+
+    private void btnAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAction1ActionPerformed
+       try{   
+        writeFile();
+        JOptionPane.showMessageDialog(null, "Lưu thành công");
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Lưu thất bại");
+        }
+    }//GEN-LAST:event_btnAction1ActionPerformed
+     private void readFile(){
+         JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        String out = "";
+        if(f != null){
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while(sc.hasNext()){
+                    out += sc.nextLine();
+                }
+                txtPlainText.setText(out);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");          
+            }
+        }
+    }
+    private void writeFile(){
+    
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(this);
+        //file select
+        File f = chooser.getSelectedFile();
+        
+        if(f != null){
+            Formatter saveFile;
+            try {
+                String input = txtCipherText.getText();
+                saveFile = new Formatter(f);
+                saveFile.format("%s", input);
+                saveFile.close();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+
+            }
+        
+    }
+    }
+    /**
+     * @param args the command line arguments
+     */
+    private int getIndex(String s){
+        
+        int i = 0;
+        for (; i < alphabet.length; i++) {
+            if (s.equalsIgnoreCase(alphabet[i]))
+                return i;
+        }
+        return i;
+    }
+    private boolean isAlphabet(String s)
+    {
+        for (int i = 0 ; i < alphabet.length; i++) {
+            if (s.equalsIgnoreCase(alphabet[i]))
+                return true;
+        }
+        return false;
+    }
+    private String maHoaROT13(String s){
+        int index;
+        if(getIndex(s)/13 == 0)
+            index = getIndex(s)+13;
+        else 
+            index = getIndex(s)-13;
+         if(s.codePointAt(0) >64 && s.codePointAt(0) < 91)
+        {
+            return ALPHABET[index];
+        }
+        return alphabet[index];
+    }
+     
+      
+    private String cipherText(String s){
+        String []as = s.split("");
+        StringBuilder ex = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if(isAlphabet(as[i]))
+            ex.append(maHoaROT13(as[i]));
+            else
+            ex.append(as[i]);
+        }
+        return ex.toString();
+    }
     /**
      * @param args the command line arguments
      */
@@ -77,7 +243,14 @@ public class frmROT13 extends javax.swing.JFrame {
             }
         });
     }
-
+     private String[] alphabet = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+     private String[] ALPHABET = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAction;
+    private javax.swing.JButton btnAction1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField txtCipherText;
+    private javax.swing.JTextField txtPlainText;
     // End of variables declaration//GEN-END:variables
 }
