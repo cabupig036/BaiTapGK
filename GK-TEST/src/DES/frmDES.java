@@ -19,6 +19,7 @@ public class frmDES extends javax.swing.JFrame {
      */
     public frmDES() {
         initComponents();
+<<<<<<< HEAD
 <<<<<<< Updated upstream
      
         String a = "0111010100101000011110000011100101110100100100111100101101110000";
@@ -26,30 +27,21 @@ public class frmDES extends javax.swing.JFrame {
         String a = "0110100001100101011011000110110001101111011100110111001101110011";
         String b = "0110100001100101011011000110110001101111011100110111001101110011";
 >>>>>>> Stashed changes
+=======
+        String a = "0110100001100101011011000110110001101111011100110111001101110011";
+>>>>>>> 7a733ee266b69a66e4a21623db8569d957d1869f
         String[] s = a.split("");
-        String[] PC1 = PC1Performed(s);
-        setCD(PC1);
-        System.out.println("------------------------------------------------");
-        String[] C = CDNumber( C0,6);
-        String[] D = CDNumber( D0,6);
-        System.out.println(Arrays.toString(keyNumber(C, D)));
-        /*
-        String a = "1001001";
-        String[] s= a.split("");
-       System.out.println(Arrays.toString(s));
-        System.out.println(Arrays.toString(shift1(s)));
-        */
-        
-        
-        
-       /* String[] stubResultEboxes = {"0","1","1","0","1","0","1","1","0","1","0","1","0","0","0","1","1","1","0","1","0","0","1","0","1","1","0","0","1","1","0","0",
-        "1","0","1","1","0","1","1","0","0","0","0","1","1","0","1","0"};
-        
-        String[] sBoxesStub = sBoxesPerform(stubResultEboxes);
-        String[] pBoxesStub = pBoxesPerform(sBoxesStub);
-        RPTFinal(pBoxesStub);
-        */
+        String[] IP = IPPerformed(s);
+        twoHavlesPT(IP);
+        String[] pc1 =PC1Performed(s);
+        setCD(pc1);
+        Round();
+        swapLeftAndRightPlainText();
+        String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
+        System.out.println(cipher);
+
     }
+    // <editor-fold defaultstate="collapsed" desc="Global variable"> 
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
     String[] swapRPT = new String[32];
@@ -125,6 +117,21 @@ public class frmDES extends javax.swing.JFrame {
             RPT[i] = XOR(pBoxResult[i], LPT[i]);
         }
     }
+    private void Round(){
+         for (int i = 1; i <= 16; i++) {
+             String[] C = CDNumber(C0,i);
+         String[] D = CDNumber(C0,i);
+         String key = convertArray(keyNumber(C, D));
+         String resultEboxXorKey = EboxXorKey(EBoxPerform(), key);
+        String[] SboxResult = sBoxesPerform(resultEboxXorKey.split(""));
+        String[] PBoxResult = pBoxesPerform(SboxResult);
+        RPTFinal(PBoxResult);
+        LPT= swapRPT;
+        }
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Truong"> 
     private String[] sBoxesPerform(String[] eBoxesResult){
         String[] resultSBoxes = new String[32];
         int currentIndexResult = 0;
@@ -191,8 +198,9 @@ public class frmDES extends javax.swing.JFrame {
     private void twoHavlesPT(String[] ipResult){
         for (int i = 0; i < ipResult.length / 2; i++) {
             LPT[i] = ipResult[i];
-            RPT[i+32] = ipResult[i+32];
+            RPT[i] = ipResult[i+32];
         }
+        
         swapRPT = RPT;
     }
     
@@ -226,7 +234,61 @@ public class frmDES extends javax.swing.JFrame {
         };
         return binaryReturn;
     }
-    //Dau
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="Tri">  
+    
+    private void swapLeftAndRightPlainText(){
+        String temp;
+        for(int i = 0; i < 32; i++){
+            temp = LPT[i];
+            LPT[i] = RPT[i];
+            RPT[i] = temp;
+        }
+    }
+    private String finalPermutationPerform(String round16Result){
+        String result = "";
+        int[] finalPermutaionTable = new int[]{
+                                    40,8,48,16,56,24,64,32,
+                                    39,7,47,15,55,23,63,31,
+                                    38,6,46,14,54,22,62,30,
+                                    37,5,45,13,53,21,61,29,
+                                    36,4,44,12,52,20,60,28,
+                                    35,3,43,11,51,19,59,27,
+                                    34,2,42,10,50,18,58,26,
+                                    33,1,41, 9,49,17,57,25};
+        for(int i : finalPermutaionTable){
+            result += round16Result.charAt(i-1);
+        }
+        return result;
+    }
+    private String EBoxPerform(){
+       String result = "";
+       int[] eBoxTable = new int[]{
+                                   32, 1, 2, 3, 4, 5,
+                                    4, 5, 6, 7, 8, 9,
+                                    8, 9,10,11,12,13,
+                                   12,13,14,15,16,17,
+                                   16,17,18,19,20,21,
+                                   20,21,22,23,24,25,
+                                   24,25,26,27,28,29,
+                                   28,29,30,31,32, 1};
+       for(int i : eBoxTable){
+           result += RPT[i-1];
+         
+       }
+       return result;
+    }
+    private String EboxXorKey(String eboxResult, String key){
+        String result = "";
+        for(int i = 0; i < 48; i++){
+            result += XOR(String.valueOf(eboxResult.charAt(i)) , String.valueOf(key.charAt(i)));
+        }
+        return  result;
+    }
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="Dau">
     private String[] IPPerformed (String[] plainText){
         String[] result = new String[64];
         for (int i = 0; i <IP.length; i++) {
@@ -267,16 +329,11 @@ public class frmDES extends javax.swing.JFrame {
     }
     private String[] merge(String[] C,String[] D)
     {
-        int j =0;
-        String[] result = new String[56];
-        for (int i = 0; i < 56; i++) {
-            if(i<28)
+      
+        String[] result = new String[C.length + D.length];
+        for (int i = 0; i < (C.length + D.length) /2 ; i++) {
             result[i] = C[i];
-            else
-            {
-                result[i] = D[j];
-                j++;
-            }
+            result[ C.length + i ] = D[i]; 
         }
         return result;
     }
@@ -294,8 +351,18 @@ public class frmDES extends javax.swing.JFrame {
         key56 =  merge(CNumber, DNumber);
         String[] key48 = new String[48];
         key48 = PC2Performed(key56);
+    
         return key48;
     }
+    private String convertArray(String[] Array){
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < Array.length; i++) {
+            s.append(Array[i]);
+        }
+        return s.toString();
+    }
+   // </editor-fold> 
+    
  
     private String[] shiftCD(String[] CD,int index)
     {
@@ -324,6 +391,7 @@ public class frmDES extends javax.swing.JFrame {
      private String[] shift2(String[] s){
          return   shift1(shift1(s));
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
