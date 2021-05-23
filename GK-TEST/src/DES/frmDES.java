@@ -19,8 +19,13 @@ public class frmDES extends javax.swing.JFrame {
      */
     public frmDES() {
         initComponents();
+<<<<<<< Updated upstream
      
         String a = "0111010100101000011110000011100101110100100100111100101101110000";
+=======
+        String a = "0110100001100101011011000110110001101111011100110111001101110011";
+        String b = "0110100001100101011011000110110001101111011100110111001101110011";
+>>>>>>> Stashed changes
         String[] s = a.split("");
         String[] PC1 = PC1Performed(s);
         setCD(PC1);
