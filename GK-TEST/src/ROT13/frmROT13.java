@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package ROT13;
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;

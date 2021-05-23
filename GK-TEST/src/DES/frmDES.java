@@ -19,17 +19,9 @@ public class frmDES extends javax.swing.JFrame {
      */
     public frmDES() {
         initComponents();
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-     
-        String a = "0111010100101000011110000011100101110100100100111100101101110000";
-=======
+
         String a = "0110100001100101011011000110110001101111011100110111001101110011";
-        String b = "0110100001100101011011000110110001101111011100110111001101110011";
->>>>>>> Stashed changes
-=======
-        String a = "0110100001100101011011000110110001101111011100110111001101110011";
->>>>>>> 7a733ee266b69a66e4a21623db8569d957d1869f
+
         String[] s = a.split("");
         String[] IP = IPPerformed(s);
         twoHavlesPT(IP);
