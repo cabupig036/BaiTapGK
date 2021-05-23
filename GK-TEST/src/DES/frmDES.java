@@ -41,7 +41,6 @@ public class frmDES extends javax.swing.JFrame {
         System.out.println(cipher);
 
     }
-    // <editor-fold defaultstate="collapsed" desc="Global variable"> 
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
     String[] swapRPT = new String[32];
@@ -129,9 +128,6 @@ public class frmDES extends javax.swing.JFrame {
         LPT= swapRPT;
         }
     }
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Truong"> 
     private String[] sBoxesPerform(String[] eBoxesResult){
         String[] resultSBoxes = new String[32];
         int currentIndexResult = 0;
@@ -234,8 +230,6 @@ public class frmDES extends javax.swing.JFrame {
         };
         return binaryReturn;
     }
-    // </editor-fold> 
-    
     // <editor-fold defaultstate="collapsed" desc="Tri">  
     
     private void swapLeftAndRightPlainText(){
@@ -287,8 +281,7 @@ public class frmDES extends javax.swing.JFrame {
         return  result;
     }
     // </editor-fold> 
-    
-    // <editor-fold defaultstate="collapsed" desc="Dau">
+    //Dau
     private String[] IPPerformed (String[] plainText){
         String[] result = new String[64];
         for (int i = 0; i <IP.length; i++) {
@@ -361,7 +354,7 @@ public class frmDES extends javax.swing.JFrame {
         }
         return s.toString();
     }
-   // </editor-fold> 
+   
     
  
     private String[] shiftCD(String[] CD,int index)
