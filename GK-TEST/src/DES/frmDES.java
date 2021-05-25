@@ -5,15 +5,21 @@
  */
 package DES;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import static java.lang.Integer.parseInt;
 import java.util.Arrays;
+import java.util.Formatter;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Tu Khuyen
  */
 public class frmDES extends javax.swing.JFrame {
-
+   
     /**
      * Creates new form frmDES
      */
@@ -33,6 +39,7 @@ public class frmDES extends javax.swing.JFrame {
         System.out.println(cipher);
 
     }
+   
     // <editor-fold defaultstate="collapsed" desc="Variable"> 
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
@@ -384,6 +391,46 @@ public class frmDES extends javax.swing.JFrame {
          return   shift1(shift1(s));
     }
     // </editor-fold> 
+      private void readFile(){
+         JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        String out = "";
+        if(f != null){
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while(sc.hasNext()){
+                    out += sc.nextLine();
+                }
+                txtPlainText.setText(out);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");          
+            }
+        }
+    }
+    private void writeFile(){
+    
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(this);
+        //file select
+        File f = chooser.getSelectedFile();
+        
+        if(f != null){
+            Formatter saveFile;
+            try {
+                String input = txtCipher.getText();
+                saveFile = new Formatter(f);
+                saveFile.format("%s", input);
+                saveFile.close();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+
+            }
+        
+    }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
