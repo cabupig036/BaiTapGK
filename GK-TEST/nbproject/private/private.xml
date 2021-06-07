@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/Ben/Desktop/DES/BaiTapGK/GK-TEST/src/DES/frmDES.java</file>
             <file>file:/C:/Users/Ben/Desktop/DES/BaiTapGK/GK-TEST/src/ROT13/frmROT13.java</file>
+=======
+            <file>file:/C:/Users/asxi3/OneDrive/Documents/GitHub/BaiTapGK/GK-TEST/src/RSA/frmRSA.java</file>
+            <file>file:/C:/Users/asxi3/OneDrive/Documents/GitHub/BaiTapGK/GK-TEST/src/DES/frmDES.java</file>
+            <file>file:/C:/Users/asxi3/OneDrive/Documents/GitHub/BaiTapGK/GK-TEST/src/ROT13/frmROT13.java</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>

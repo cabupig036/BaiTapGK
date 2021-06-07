@@ -136,10 +136,17 @@ public class frmRSA extends javax.swing.JFrame {
         txtPlainText1 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtPlainText2 = new javax.swing.JTextField();
+        btnChoose = new javax.swing.JButton();
+        lblFileChoose = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("PlainText");
 
@@ -167,11 +174,19 @@ public class frmRSA extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel3.setText("RSA PRO VIP");
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("RSA ");
 
         jLabel4.setText("Private Key");
 
         jLabel5.setText("Public Key");
+
+        btnChoose.setText("Choose File");
+        btnChoose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -181,11 +196,14 @@ public class frmRSA extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnChoose)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFileChoose)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cboCipherStyle, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                         .addComponent(btnEncrypt)
                         .addGap(18, 18, 18)
                         .addComponent(btnDecrypt))
@@ -196,29 +214,27 @@ public class frmRSA extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(txtCipherText)))
+                        .addComponent(txtCipherText))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPlainText1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPlainText2)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-                .addGap(118, 118, 118))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(txtPlainText1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtPlainText2)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(140, 140, 140))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -238,7 +254,10 @@ public class frmRSA extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtCipherText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
-                .addComponent(btnSave)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnChoose)
+                    .addComponent(lblFileChoose))
                 .addGap(53, 53, 53))
         );
 
@@ -256,7 +275,74 @@ public class frmRSA extends javax.swing.JFrame {
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDecryptActionPerformed
+
+    private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed
+                try{   
+        readFile();
+        JOptionPane.showMessageDialog(null, "Mở thành công");
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Mở thất bại");
+        }
+    }//GEN-LAST:event_btnChooseActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+         try{   
+        writeFile();
+       
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Lưu thất bại");
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+                                             
+     private void readFile(){
+         JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        String out = "";
+        if(f != null){
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while(sc.hasNext()){
+                    out += sc.nextLine();
+                }
+                txtPlainText.setText(out);
+                 txtPlainText.setEditable(false);
+              
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"Không thể mở");          
+            }
+        }
+        lblFileChoose.setText( f.getName());
+    }
     
+    private void writeFile(){
+    
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(this);
+        //file select
+        File f = chooser.getSelectedFile();
+        
+        if(f != null){
+            Formatter saveFile;
+            try {
+                String input = txtCipherText.getText();
+                saveFile = new Formatter(f);
+                saveFile.format("%s", input);
+                saveFile.close();
+                 JOptionPane.showMessageDialog(null, "Lưu thành công");
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+
+            }
+        
+    }
+    }
 
     /**
      * @param args the command line arguments
@@ -294,6 +380,7 @@ public class frmRSA extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChoose;
     private javax.swing.JButton btnDecrypt;
     private javax.swing.JButton btnEncrypt;
     private javax.swing.JButton btnSave;
@@ -303,6 +390,7 @@ public class frmRSA extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblFileChoose;
     private javax.swing.JTextField txtCipherText;
     private javax.swing.JTextField txtPlainText;
     private javax.swing.JTextField txtPlainText1;

@@ -26,7 +26,7 @@ public class frmROT13 extends javax.swing.JFrame {
      */
     public frmROT13() {
         initComponents();
-        readFile();
+       
     }
     
     /**
@@ -44,6 +44,9 @@ public class frmROT13 extends javax.swing.JFrame {
         txtCipherText = new javax.swing.JTextField();
         btnAction = new javax.swing.JButton();
         btnAction1 = new javax.swing.JButton();
+        btnChoose = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        lblFileChoose = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,32 +68,53 @@ public class frmROT13 extends javax.swing.JFrame {
             }
         });
 
+        btnChoose.setText("Choose File");
+        btnChoose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel5.setText("ROT13");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addGap(142, 142, 142))
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAction, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtCipherText, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))))
-                .addContainerGap(96, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnAction1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAction, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25)
+                                .addComponent(btnChoose))
+                            .addComponent(txtPlainText)
+                            .addComponent(txtCipherText, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAction1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(57, 57, 57)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblFileChoose)
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -99,10 +123,13 @@ public class frmROT13 extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtCipherText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnAction)
-                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAction)
+                    .addComponent(btnChoose)
+                    .addComponent(lblFileChoose))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAction1)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -116,13 +143,24 @@ public class frmROT13 extends javax.swing.JFrame {
     private void btnAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAction1ActionPerformed
        try{   
         writeFile();
-        JOptionPane.showMessageDialog(null, "Lưu thành công");
         }
         catch(Exception e)
         {
            JOptionPane.showMessageDialog(null, "Lưu thất bại");
         }
     }//GEN-LAST:event_btnAction1ActionPerformed
+
+    private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed
+         try{   
+        readFile();
+        JOptionPane.showMessageDialog(null, "Mở thành công");
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Mở thất bại");
+        }
+        
+    }//GEN-LAST:event_btnChooseActionPerformed
      private void readFile(){
          JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(this);
@@ -136,11 +174,16 @@ public class frmROT13 extends javax.swing.JFrame {
                     out += sc.nextLine();
                 }
                 txtPlainText.setText(out);
+                
+                 txtPlainText.setEditable(false);
+              
             } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane,"cannot open file");          
+                JOptionPane.showMessageDialog(rootPane,"Không thể mở");          
             }
         }
+        lblFileChoose.setText( f.getName());
     }
+    
     private void writeFile(){
     
         // TODO add your handling code here:
@@ -156,11 +199,11 @@ public class frmROT13 extends javax.swing.JFrame {
                 saveFile = new Formatter(f);
                 saveFile.format("%s", input);
                 saveFile.close();
+                JOptionPane.showMessageDialog(null, "Lưu thành công");
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(rootPane,"cannot open file");
 
             }
-        
     }
     }
     /**
@@ -247,8 +290,11 @@ public class frmROT13 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAction;
     private javax.swing.JButton btnAction1;
+    private javax.swing.JButton btnChoose;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblFileChoose;
     private javax.swing.JTextField txtCipherText;
     private javax.swing.JTextField txtPlainText;
     // End of variables declaration//GEN-END:variables
