@@ -5,8 +5,25 @@
  */
 package DES;
 
+import java.io.File;
+import java.io.IOException;
 import static java.lang.Integer.parseInt;
+import java.nio.file.Files;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JFileChooser;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -530,6 +547,105 @@ public class frmDES extends javax.swing.JFrame {
         });
     }
 
+    
+    private SecretKey generateKey( ){
+        KeyGenerator keygenerator;
+        try {
+            keygenerator = KeyGenerator.getInstance("DES");
+            SecretKey Key  = keygenerator.generateKey();
+            
+           
+            return Key;
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("error");
+        }
+        return null;
+    }
+    private String encodeKey ( SecretKey key ){
+        String encodedKey = "";
+        if(key != null){
+            encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+        }
+        return encodedKey;
+    }
+    
+    private SecretKey decodeKey (String encodeKey ){
+        
+        if(!encodeKey.isEmpty()){
+            byte[] decodedKey;
+            
+            decodedKey = Base64.getDecoder().decode(encodeKey);
+            
+            SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
+            
+            return  originalKey;
+        }
+        return null;
+    }
+    private byte[] encryptFile(File file, SecretKey key){
+        
+        Cipher desCipher;
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            desCipher.init(Cipher.ENCRYPT_MODE, key);
+            byte[] textEncrypted = desCipher.doFinal(fileContent);
+            return  textEncrypted;
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException ex) {
+            System.out.println("err");
+        }
+        return  null;
+    }
+    
+    private byte[] decryptFile(File file, SecretKey key){
+        Cipher desCipher;
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            
+            desCipher.init(Cipher.DECRYPT_MODE, key);
+            
+            byte[] textDecrypted = desCipher.doFinal(fileContent);
+            
+            return  textDecrypted;
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException ex) {
+            System.out.println("err");
+        }
+        return  null;
+    }
+    
+    private void demo(){
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        
+        try {
+            
+            String extension = f.toString().split("[.]")[1];
+            
+            
+            SecretKey key = generateKey();
+            
+            byte[] textEncrypt = encryptFile(f, key);
+            
+            FileUtils.writeByteArrayToFile(new File("E:\\encrypt."+extension), textEncrypt);
+            
+            byte[] textDecrypt = decryptFile(new File("E:\\encrypt."+extension), key);
+            
+            FileUtils.writeByteArrayToFile(new File("E:\\decrypt."+extension), textDecrypt);
+            
+        } catch (IOException ex) {
+            System.out.println("err");
+        }
+    }
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDecryption;
     private javax.swing.JButton btnEncryption;
@@ -541,3 +657,4 @@ public class frmDES extends javax.swing.JFrame {
     private javax.swing.JTextField txtPlainText;
     // End of variables declaration//GEN-END:variables
 }
+
