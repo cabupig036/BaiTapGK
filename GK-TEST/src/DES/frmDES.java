@@ -7,6 +7,7 @@ package DES;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import static java.lang.Integer.parseInt;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;
@@ -24,19 +25,25 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JFileChooser;
 import org.apache.commons.io.FileUtils;
+import java.util.Formatter;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Tu Khuyen
  */
 public class frmDES extends javax.swing.JFrame {
-
+   
     /**
      * Creates new form frmDES
      */
     public frmDES() {
         initComponents();
+
         String a = "0110100001100101011011000110110001101111011100110111001101110011";
+
         String[] s = a.split("");
         String[] IP = IPPerformed(s);
         twoHavlesPT(IP);
@@ -48,6 +55,56 @@ public class frmDES extends javax.swing.JFrame {
         System.out.println(cipher);
 
     }
+   
+                                          
+     private void readFile(){
+         JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        String out = "";
+        if(f != null){
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while(sc.hasNext()){
+                    out += sc.nextLine();
+                }
+                txtPlainText.setText(out);
+                 
+                 txtPlainText.setEditable(false);
+                 txtKey.setEditable(false);
+              
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"Không thể mở file");          
+            }
+        }
+        lblFileChoose.setText( f.getName());
+    }
+    
+    private void writeFile(){
+    
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(this);
+        //file select
+        File f = chooser.getSelectedFile();
+        
+        if(f != null){
+            Formatter saveFile;
+            try {
+                String input = txtCipher.getText();
+                saveFile = new Formatter(f);
+                saveFile.format("%s", input);
+                saveFile.close();
+                 JOptionPane.showMessageDialog(null, "Lưu thành công");
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+
+            }
+        
+    }
+    }
+    // <editor-fold defaultstate="collapsed" desc="Variable"> 
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
     String[] swapRPT = new String[32];
@@ -135,6 +192,9 @@ public class frmDES extends javax.swing.JFrame {
         LPT= swapRPT;
         }
     }
+    // </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="Truong"> 
     private String[] sBoxesPerform(String[] eBoxesResult){
         String[] resultSBoxes = new String[32];
         int currentIndexResult = 0;
@@ -237,6 +297,8 @@ public class frmDES extends javax.swing.JFrame {
         };
         return binaryReturn;
     }
+    // </editor-fold> 
+    
     // <editor-fold defaultstate="collapsed" desc="Tri">  
     
     private void swapLeftAndRightPlainText(){
@@ -288,7 +350,8 @@ public class frmDES extends javax.swing.JFrame {
         return  result;
     }
     // </editor-fold> 
-    //Dau
+    
+    // <editor-fold defaultstate="collapsed" desc="Dau"> 
     private String[] IPPerformed (String[] plainText){
         String[] result = new String[64];
         for (int i = 0; i <IP.length; i++) {
@@ -391,7 +454,47 @@ public class frmDES extends javax.swing.JFrame {
      private String[] shift2(String[] s){
          return   shift1(shift1(s));
     }
+    // </editor-fold> 
+      private void readFile(){
+         JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        String out = "";
+        if(f != null){
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while(sc.hasNext()){
+                    out += sc.nextLine();
+                }
+                txtPlainText.setText(out);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");          
+            }
+        }
+    }
+    private void writeFile(){
     
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showSaveDialog(this);
+        //file select
+        File f = chooser.getSelectedFile();
+        
+        if(f != null){
+            Formatter saveFile;
+            try {
+                String input = txtCipher.getText();
+                saveFile = new Formatter(f);
+                saveFile.format("%s", input);
+                saveFile.close();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+
+            }
+        
+    }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -409,6 +512,13 @@ public class frmDES extends javax.swing.JFrame {
         btnDecryption = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtCipher = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txtKey1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        lblFileChoose = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -444,53 +554,105 @@ public class frmDES extends javax.swing.JFrame {
 
         jLabel3.setText("CipherText");
 
+        jButton1.setText("Choose File");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Generate Key");
+
+        jLabel4.setText("Key Generate");
+
+        txtKey1.setEditable(false);
+        txtKey1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKey1ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel5.setText("DES");
+
+        jButton3.setText("Save ");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(356, 356, 356)
+                .addComponent(jLabel5)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnEncryption)
-                        .addGap(84, 84, 84)
-                        .addComponent(btnDecryption))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(32, 32, 32)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(32, 32, 32)
+                                .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(60, 60, 60)
+                                .addComponent(txtKey, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtPlainText, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                            .addComponent(txtKey))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(507, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(57, 57, 57)
-                .addComponent(txtCipher, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(176, 176, 176))
+                            .addComponent(txtCipher, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(txtKey1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnEncryption, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDecryption, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFileChoose)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(50, 50, 50))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtCipher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCipher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(74, 74, 74)
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtKey1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3)
+                    .addComponent(lblFileChoose))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEncryption)
                     .addComponent(btnDecryption))
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -511,6 +673,32 @@ public class frmDES extends javax.swing.JFrame {
     private void btnDecryptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDecryptionActionPerformed
+
+    private void txtKey1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKey1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKey1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+          try{   
+        readFile();
+        JOptionPane.showMessageDialog(null, "Mở thành công");
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Mở thất bại");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       try{   
+        writeFile();
+       
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, "Lưu thất bại");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -649,11 +837,18 @@ public class frmDES extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDecryption;
     private javax.swing.JButton btnEncryption;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblFileChoose;
     private javax.swing.JTextField txtCipher;
     private javax.swing.JTextField txtKey;
+    private javax.swing.JTextField txtKey1;
     private javax.swing.JTextField txtPlainText;
     // End of variables declaration//GEN-END:variables
 }
