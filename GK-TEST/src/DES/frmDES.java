@@ -42,68 +42,68 @@ public class frmDES extends javax.swing.JFrame {
     public frmDES() {
         initComponents();
 
-        String a = "0110100001100101011011000110110001101111011100110111001101110011";
-
-        String[] s = a.split("");
-        String[] IP = IPPerformed(s);
-        twoHavlesPT(IP);
-        String[] pc1 =PC1Performed(s);
-        setCD(pc1);
-        Round();
-        swapLeftAndRightPlainText();
-        String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
-        System.out.println(cipher);
-
+//        String a = "0110100001100101011011000110110001101111011100110111001101110011";
+//
+//        String[] s = a.split("");
+//        String[] IP = IPPerformed(s);
+//        twoHavlesPT(IP);
+//        String[] pc1 =PC1Performed(s);
+//        setCD(pc1);
+//        Round();
+//        swapLeftAndRightPlainText();
+//        String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
+//        System.out.println(cipher);
+        
     }
    
                                           
-     private void readFile(){
-         JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(this);
-        File f = chooser.getSelectedFile();
-        String out = "";
-        if(f != null){
-            try {
-                Scanner sc = new Scanner(f);
-                
-                while(sc.hasNext()){
-                    out += sc.nextLine();
-                }
-                txtPlainText.setText(out);
-                 
-                 txtPlainText.setEditable(false);
-                 txtKey.setEditable(false);
-              
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane,"Không thể mở file");          
-            }
-        }
-        lblFileChoose.setText( f.getName());
-    }
+//     private void readFile(){
+//         JFileChooser chooser = new JFileChooser();
+//        chooser.showOpenDialog(this);
+//        File f = chooser.getSelectedFile();
+//        String out = "";
+//        if(f != null){
+//            try {
+//                Scanner sc = new Scanner(f);
+//                
+//                while(sc.hasNext()){
+//                    out += sc.nextLine();
+//                }
+//                txtPlainText.setText(out);
+//                 
+//                 txtPlainText.setEditable(false);
+//                 txtKey.setEditable(false);
+//              
+//            } catch (FileNotFoundException ex) {
+//                JOptionPane.showMessageDialog(rootPane,"Không thể mở file");          
+//            }
+//        }
+//        lblFileChoose.setText( f.getName());
+//    }
     
-    private void writeFile(){
-    
-        // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        chooser.showSaveDialog(this);
-        //file select
-        File f = chooser.getSelectedFile();
-        
-        if(f != null){
-            Formatter saveFile;
-            try {
-                String input = txtCipher.getText();
-                saveFile = new Formatter(f);
-                saveFile.format("%s", input);
-                saveFile.close();
-                 JOptionPane.showMessageDialog(null, "Lưu thành công");
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane,"cannot open file");
-
-            }
-        
-    }
-    }
+//    private void writeFile(){
+//    
+//        // TODO add your handling code here:
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.showSaveDialog(this);
+//        //file select
+//        File f = chooser.getSelectedFile();
+//        
+//        if(f != null){
+//            Formatter saveFile;
+//            try {
+//                String input = txtCipher.getText();
+//                saveFile = new Formatter(f);
+//                saveFile.format("%s", input);
+//                saveFile.close();
+//                 JOptionPane.showMessageDialog(null, "Lưu thành công");
+//            } catch (FileNotFoundException ex) {
+//                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+//
+//            }
+//        
+//    }
+//    }
     // <editor-fold defaultstate="collapsed" desc="Variable"> 
     String[] RPT  = new String[32];
     String[] LPT = new String[32];
@@ -680,13 +680,15 @@ public class frmDES extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
           try{   
-        readFile();
+//        readFile();
+        demo();
         JOptionPane.showMessageDialog(null, "Mở thành công");
         }
         catch(Exception e)
         {
            JOptionPane.showMessageDialog(null, "Mở thất bại");
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -735,11 +737,11 @@ public class frmDES extends javax.swing.JFrame {
         });
     }
 
-    
+    // <editor-fold defaultstate="collapsed" desc="File">
     private SecretKey generateKey( ){
         KeyGenerator keygenerator;
         try {
-            keygenerator = KeyGenerator.getInstance("DES");
+            keygenerator = KeyGenerator.getInstance("DES");//change here
             SecretKey Key  = keygenerator.generateKey();
             
            
@@ -764,7 +766,7 @@ public class frmDES extends javax.swing.JFrame {
             
             decodedKey = Base64.getDecoder().decode(encodeKey);
             
-            SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
+            SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");//change here
             
             return  originalKey;
         }
@@ -776,7 +778,7 @@ public class frmDES extends javax.swing.JFrame {
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             
-            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
             desCipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] textEncrypted = desCipher.doFinal(fileContent);
             return  textEncrypted;
@@ -792,7 +794,7 @@ public class frmDES extends javax.swing.JFrame {
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             
-            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
             
             desCipher.init(Cipher.DECRYPT_MODE, key);
             
@@ -830,7 +832,7 @@ public class frmDES extends javax.swing.JFrame {
             System.out.println("err");
         }
     }
-    
+    // </editor-fold>   
     
     
     

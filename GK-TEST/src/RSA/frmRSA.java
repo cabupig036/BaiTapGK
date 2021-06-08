@@ -7,11 +7,24 @@ package RSA;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Formatter;
 import java.util.Random;
 import java.util.Scanner;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -298,51 +311,51 @@ public class frmRSA extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
                                              
-     private void readFile(){
-         JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(this);
-        File f = chooser.getSelectedFile();
-        String out = "";
-        if(f != null){
-            try {
-                Scanner sc = new Scanner(f);
-                
-                while(sc.hasNext()){
-                    out += sc.nextLine();
-                }
-                txtPlainText.setText(out);
-                 txtPlainText.setEditable(false);
-              
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane,"Không thể mở");          
-            }
-        }
-        lblFileChoose.setText( f.getName());
-    }
+//     private void readFile(){
+//         JFileChooser chooser = new JFileChooser();
+//        chooser.showOpenDialog(this);
+//        File f = chooser.getSelectedFile();
+//        String out = "";
+//        if(f != null){
+//            try {
+//                Scanner sc = new Scanner(f);
+//                
+//                while(sc.hasNext()){
+//                    out += sc.nextLine();
+//                }
+//                txtPlainText.setText(out);
+//                 txtPlainText.setEditable(false);
+//              
+//            } catch (FileNotFoundException ex) {
+//                JOptionPane.showMessageDialog(rootPane,"Không thể mở");          
+//            }
+//        }
+//        lblFileChoose.setText( f.getName());
+//    }
     
-    private void writeFile(){
-    
-        // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        chooser.showSaveDialog(this);
-        //file select
-        File f = chooser.getSelectedFile();
-        
-        if(f != null){
-            Formatter saveFile;
-            try {
-                String input = txtCipherText.getText();
-                saveFile = new Formatter(f);
-                saveFile.format("%s", input);
-                saveFile.close();
-                 JOptionPane.showMessageDialog(null, "Lưu thành công");
-            } catch (FileNotFoundException ex) {
-                JOptionPane.showMessageDialog(rootPane,"cannot open file");
-
-            }
-        
-    }
-    }
+//    private void writeFile(){
+//    
+//        // TODO add your handling code here:
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.showSaveDialog(this);
+//        //file select
+//        File f = chooser.getSelectedFile();
+//        
+//        if(f != null){
+//            Formatter saveFile;
+//            try {
+//                String input = txtCipherText.getText();
+//                saveFile = new Formatter(f);
+//                saveFile.format("%s", input);
+//                saveFile.close();
+//                 JOptionPane.showMessageDialog(null, "Lưu thành công");
+//            } catch (FileNotFoundException ex) {
+//                JOptionPane.showMessageDialog(rootPane,"cannot open file");
+//
+//            }
+//        
+//    }
+//    }
 
     /**
      * @param args the command line arguments
@@ -378,6 +391,103 @@ public class frmRSA extends javax.swing.JFrame {
             }
         });
     }
+    
+    // <editor-fold defaultstate="collapsed" desc="File">
+    private SecretKey generateKey( ){
+        KeyGenerator keygenerator;
+        try {
+            keygenerator = KeyGenerator.getInstance("DES");//change here
+            SecretKey Key  = keygenerator.generateKey();
+            
+           
+            return Key;
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("error");
+        }
+        return null;
+    }
+    private String encodeKey ( SecretKey key ){
+        String encodedKey = "";
+        if(key != null){
+            encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+        }
+        return encodedKey;
+    }
+    
+    private SecretKey decodeKey (String encodeKey ){
+        
+        if(!encodeKey.isEmpty()){
+            byte[] decodedKey;
+            
+            decodedKey = Base64.getDecoder().decode(encodeKey);
+            
+            SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");//change here
+            
+            return  originalKey;
+        }
+        return null;
+    }
+    private byte[] encryptFile(File file, SecretKey key){
+        
+        Cipher desCipher;
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            desCipher.init(Cipher.ENCRYPT_MODE, key);
+            byte[] textEncrypted = desCipher.doFinal(fileContent);
+            return  textEncrypted;
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException ex) {
+            System.out.println("err");
+        }
+        return  null;
+    }
+    
+    private byte[] decryptFile(File file, SecretKey key){
+        Cipher desCipher;
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            
+            desCipher.init(Cipher.DECRYPT_MODE, key);
+            
+            byte[] textDecrypted = desCipher.doFinal(fileContent);
+            
+            return  textDecrypted;
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | IOException ex) {
+            System.out.println("err");
+        }
+        return  null;
+    }
+    
+    private void demo(){
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File f = chooser.getSelectedFile();
+        
+        try {
+            
+            String extension = f.toString().split("[.]")[1];
+            
+            
+            SecretKey key = generateKey();
+            
+            byte[] textEncrypt = encryptFile(f, key);
+            
+            FileUtils.writeByteArrayToFile(new File("E:\\encrypt."+extension), textEncrypt);
+            
+            byte[] textDecrypt = decryptFile(new File("E:\\encrypt."+extension), key);
+            
+            FileUtils.writeByteArrayToFile(new File("E:\\decrypt."+extension), textDecrypt);
+            
+        } catch (IOException ex) {
+            System.out.println("err");
+        }
+    }
+    // </editor-fold>  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChoose;
