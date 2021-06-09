@@ -106,7 +106,7 @@ public class frmRSA extends javax.swing.JFrame {
        int d = calculateD(e, n);
        int[] Kpublic = new int[]{e,N};
        int[] Kprivate = new int[]{d,N};
-
+       String privateKey;
     // </editor-fold> 
     
      // <editor-fold defaultstate="collapsed" desc="Function"> 
@@ -270,11 +270,12 @@ public class frmRSA extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(txtPublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEncryptFile)
-                    .addComponent(btnDecrypt)
-                    .addComponent(btnEncrypt)
-                    .addComponent(btnDecryptFile))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEncryptFile, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDecrypt)
+                        .addComponent(btnEncrypt)
+                        .addComponent(btnDecryptFile)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -301,10 +302,13 @@ public class frmRSA extends javax.swing.JFrame {
             PrivateKey keyPrivate = keyPair.getPrivate();
             txtPrivateKey.setText(encodePrivateKey(keyPrivate));
             byte[] encrypt = encryptFile(f, keyPublic);
+            byte[] privateByteKey = keyPrivate.getEncoded();
             File path = new File("encryptRSA." + extension);
             FileUtils.writeByteArrayToFile(new File("encryptRSA." + extension), encrypt);
+            
+            privateKey = encodePrivateKey(keyPrivate);
+            FileUtils.writeByteArrayToFile(new File("keyPrivateRSA." + extension), privateByteKey);          
             JOptionPane.showMessageDialog(null, "File đã được mã hóa và lưu lại ở " + path.getAbsolutePath());
-            JOptionPane.showMessageDialog(null, "Vui lòng lưu lại Privatekey để có thể giải mã file");
 
         } catch (IOException ex) {
             System.out.println("err");
@@ -349,10 +353,15 @@ public class frmRSA extends javax.swing.JFrame {
         try {
             String[] fileName = f.toString().split("[.]");
             String extension = fileName[fileName.length - 1];
-            byte[] decrypt = decryptFile(f, decodePrivateKey(txtPrivateKey.getText()));
+           
+            String privateKeyLocal = txtPrivateKey.getText();
+            if(txtPrivateKey.getText().isEmpty()){
+              privateKeyLocal = this.privateKey;
+            }
+            byte[] decrypt = decryptFile(f, decodePrivateKey(privateKeyLocal));
             File path = new File("decryptRSA." + extension);
             FileUtils.writeByteArrayToFile(new File("decryptRSA." + extension), decrypt);
-            JOptionPane.showMessageDialog(null, "File đã được mã hóa và lưu lại ở " + path.getAbsolutePath());
+            JOptionPane.showMessageDialog(null, "File đã được giải mã và lưu lại ở " + path.getAbsolutePath());
         } catch (IOException ex) {
             System.out.println("err");
         }

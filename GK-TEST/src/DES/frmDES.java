@@ -171,6 +171,7 @@ public class frmDES extends javax.swing.JFrame {
     String[] swapRPT = new String[32];
     String[] C0 = new String[28];
     String[] D0 = new String[28];
+    SecretKey gloSecretKey;
     final int[][] SBOX_0 = {
         {14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
         {0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8},
@@ -745,6 +746,7 @@ public class frmDES extends javax.swing.JFrame {
             } else {
                 secretKey = generateKey(key);
             }
+            gloSecretKey = secretKey;
             txtKeyGen.setText(encodeKey(secretKey));
             String cipherText = encryptText(plainText, secretKey);
             txtCipher.setText(cipherText);
@@ -758,21 +760,13 @@ public class frmDES extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Hãy nhập CipherText");
         } else {
             String cipherText = txtCipher.getText();
-            String key = txtKey.getText();
-            SecretKey secretKey;
-            if (key.isEmpty()) {
-                JOptionPane.showMessageDialog(rootPane, "Hãy nhập Key để giải mã");
-            } else {
-                if (key.length() > 8 || key.length() < 8) {
-                    JOptionPane.showMessageDialog(rootPane, "Vui lòng nhập key có 8 ký tự");
-                } else {
-                    secretKey = decodeKey(key);
+            SecretKey secretKey =gloSecretKey;
                     String plainText = decryptText(cipherText, secretKey);
                     txtPlainText.setText(plainText);
                 }
 
-            }
-        }
+            
+        
     }//GEN-LAST:event_btnDecryptionActionPerformed
 
     private void txtKeyGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKeyGenActionPerformed
