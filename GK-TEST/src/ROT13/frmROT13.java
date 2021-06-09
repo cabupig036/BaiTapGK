@@ -142,7 +142,7 @@ public class frmROT13 extends javax.swing.JFrame {
 
     private void btnActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionActionPerformed
          
-         if(txtPlainText.getText() ==""){
+         if("".equals(txtPlainText.getText())){
             JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
         }
         else{

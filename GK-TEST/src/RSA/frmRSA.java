@@ -300,7 +300,7 @@ public class frmRSA extends javax.swing.JFrame {
     }//GEN-LAST:event_cboCipherStyleActionPerformed
 
     private void btnEncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptActionPerformed
-        if(txtPlainText.getText() ==""){
+        if("".equals(txtPlainText.getText())){
             JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
         }
         else{
@@ -308,7 +308,7 @@ public class frmRSA extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEncryptActionPerformed
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
-        if(txtCipherText.getText() ==""){
+        if("".equals(txtCipherText.getText())){
             JOptionPane.showMessageDialog(rootPane,"Hãy nhập CipherText");
         }
         else{
