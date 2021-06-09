@@ -36,13 +36,6 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnSave" min="-2" pref="88" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="cboCipherStyle" min="-2" pref="166" max="-2" attributes="0"/>
-                      <EmptySpace pref="89" max="32767" attributes="0"/>
-                      <Component id="btnEncrypt" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnDecrypt" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
@@ -60,7 +53,19 @@
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="txtPlainText2" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btnEncryptFile" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="btnDecryptFile" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="btnEncrypt" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnDecrypt" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="txtPlainText2" pref="348" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -91,9 +96,10 @@
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cboCipherStyle" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnEncrypt" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEncryptFile" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="btnDecrypt" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEncrypt" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnDecryptFile" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -134,28 +140,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtCipherText">
     </Component>
-    <Component class="javax.swing.JComboBox" name="cboCipherStyle">
+    <Component class="javax.swing.JButton" name="btnEncryptFile">
       <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
-            <StringItem index="0" value="M&#xe3; h&#xf3;a b&#x1ea3;o m&#x1ead;t"/>
-            <StringItem index="1" value="m&#xe3; h&#xf3;a chi&#x1ebf;n thu&#x1ead;t"/>
-          </StringArray>
-        </Property>
+        <Property name="text" type="java.lang.String" value="EncryptFile"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboCipherStyleActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnEncrypt">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Encrypt"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEncryptActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEncryptFileActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnDecrypt">
@@ -198,6 +188,22 @@
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblFileChoose">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnEncrypt">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Encrypt"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEncryptActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnDecryptFile">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="DecryptFile"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDecryptFileActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

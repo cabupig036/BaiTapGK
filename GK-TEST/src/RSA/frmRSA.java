@@ -154,8 +154,7 @@ public class frmRSA extends javax.swing.JFrame {
         txtPlainText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtCipherText = new javax.swing.JTextField();
-        cboCipherStyle = new javax.swing.JComboBox<>();
-        btnEncrypt = new javax.swing.JButton();
+        btnEncryptFile = new javax.swing.JButton();
         btnDecrypt = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -164,6 +163,8 @@ public class frmRSA extends javax.swing.JFrame {
         txtPlainText2 = new javax.swing.JTextField();
         btnChoose = new javax.swing.JButton();
         lblFileChoose = new javax.swing.JLabel();
+        btnEncrypt = new javax.swing.JButton();
+        btnDecryptFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -183,17 +184,10 @@ public class frmRSA extends javax.swing.JFrame {
 
         jLabel2.setText("CipherText");
 
-        cboCipherStyle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã hóa bảo mật", "mã hóa chiến thuật" }));
-        cboCipherStyle.addActionListener(new java.awt.event.ActionListener() {
+        btnEncryptFile.setText("EncryptFile");
+        btnEncryptFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboCipherStyleActionPerformed(evt);
-            }
-        });
-
-        btnEncrypt.setText("Encrypt");
-        btnEncrypt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEncryptActionPerformed(evt);
+                btnEncryptFileActionPerformed(evt);
             }
         });
 
@@ -219,6 +213,20 @@ public class frmRSA extends javax.swing.JFrame {
             }
         });
 
+        btnEncrypt.setText("Encrypt");
+        btnEncrypt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEncryptActionPerformed(evt);
+            }
+        });
+
+        btnDecryptFile.setText("DecryptFile");
+        btnDecryptFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDecryptFileActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -232,12 +240,6 @@ public class frmRSA extends javax.swing.JFrame {
                         .addComponent(lblFileChoose)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cboCipherStyle, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                        .addComponent(btnEncrypt)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDecrypt))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(27, 27, 27)
@@ -253,7 +255,17 @@ public class frmRSA extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtPlainText2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnEncryptFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnDecryptFile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEncrypt)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDecrypt))
+                            .addComponent(txtPlainText2, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -277,9 +289,10 @@ public class frmRSA extends javax.swing.JFrame {
                     .addComponent(txtPlainText2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboCipherStyle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEncryptFile)
+                    .addComponent(btnDecrypt)
                     .addComponent(btnEncrypt)
-                    .addComponent(btnDecrypt))
+                    .addComponent(btnDecryptFile))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -295,17 +308,13 @@ public class frmRSA extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cboCipherStyleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCipherStyleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboCipherStyleActionPerformed
-
-    private void btnEncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptActionPerformed
+    private void btnEncryptFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptFileActionPerformed
         if("".equals(txtPlainText.getText())){
             JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
         }
         else{
         }
-    }//GEN-LAST:event_btnEncryptActionPerformed
+    }//GEN-LAST:event_btnEncryptFileActionPerformed
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
         if("".equals(txtCipherText.getText())){
@@ -343,6 +352,15 @@ public class frmRSA extends javax.swing.JFrame {
         jfrm2.setSize(768, 400); 
         jfrm2.setVisible(true);
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnEncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptActionPerformed
+       KeyPair keyPair = generateKey();
+      
+    }//GEN-LAST:event_btnEncryptActionPerformed
+
+    private void btnDecryptFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDecryptFileActionPerformed
                                              
 //     private void readFile(){
 //         JFileChooser chooser = new JFileChooser();
@@ -599,9 +617,10 @@ public class frmRSA extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChoose;
     private javax.swing.JButton btnDecrypt;
+    private javax.swing.JButton btnDecryptFile;
     private javax.swing.JButton btnEncrypt;
+    private javax.swing.JButton btnEncryptFile;
     private javax.swing.JButton btnSave;
-    private javax.swing.JComboBox<String> cboCipherStyle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
