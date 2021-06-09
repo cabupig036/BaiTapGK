@@ -300,11 +300,19 @@ public class frmRSA extends javax.swing.JFrame {
     }//GEN-LAST:event_cboCipherStyleActionPerformed
 
     private void btnEncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptActionPerformed
-        // TODO add your handling code here:
+        if(txtPlainText.getText() ==""){
+            JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
+        }
+        else{
+        }
     }//GEN-LAST:event_btnEncryptActionPerformed
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
-        // TODO add your handling code here:
+        if(txtCipherText.getText() ==""){
+            JOptionPane.showMessageDialog(rootPane,"Hãy nhập CipherText");
+        }
+        else{
+        }
     }//GEN-LAST:event_btnDecryptActionPerformed
 
     private void btnChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseActionPerformed

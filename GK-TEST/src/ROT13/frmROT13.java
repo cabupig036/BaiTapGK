@@ -141,8 +141,13 @@ public class frmROT13 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionActionPerformed
-         txtCipherText.setText(cipherText(txtPlainText.getText()));
-      
+         
+         if(txtPlainText.getText() ==""){
+            JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
+        }
+        else{
+        txtCipherText.setText(cipherText(txtPlainText.getText()));
+         }
     }//GEN-LAST:event_btnActionActionPerformed
 
     private void btnAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAction1ActionPerformed

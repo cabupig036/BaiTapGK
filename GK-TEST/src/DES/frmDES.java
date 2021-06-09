@@ -546,6 +546,7 @@ public class frmDES extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane,"cannot open file");          
             }
         }
+      
     }
     private void writeFile(){
     
@@ -754,6 +755,11 @@ public class frmDES extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPlainTextActionPerformed
 
     private void btnEncryptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptionActionPerformed
+        if(txtPlainText.getText() ==""){
+            JOptionPane.showMessageDialog(rootPane,"Hãy nhập PlainText");
+        }
+        else{
+        
         String plainText = txtPlainText.getText();
         String key = txtKey.getText();
         SecretKey secretKey;
@@ -766,9 +772,15 @@ public class frmDES extends javax.swing.JFrame {
         txtKey1.setText(encodeKey(secretKey));
         String cipherText = encryptText(plainText, secretKey);
         txtCipher.setText(cipherText);
+        }
     }//GEN-LAST:event_btnEncryptionActionPerformed
 
     private void btnDecryptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptionActionPerformed
+        if(txtCipher.getText() == "")
+        {
+             JOptionPane.showMessageDialog(rootPane,"Hãy nhập CipherText");
+        }
+        else{
         String cipherText = txtCipher.getText();
         String key = txtKey.getText();
         if(key.isEmpty() || cipherText.isEmpty()) return;
@@ -780,6 +792,7 @@ public class frmDES extends javax.swing.JFrame {
 //        SecretKey deKey = decodeKey(encode);
 //        System.out.println(key);
 //        System.out.println(deKey);
+        }
     }//GEN-LAST:event_btnDecryptionActionPerformed
 
     private void txtKey1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKey1ActionPerformed
