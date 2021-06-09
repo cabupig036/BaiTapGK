@@ -44,6 +44,77 @@ public class frmDES extends javax.swing.JFrame {
      */
     public frmDES() {
         initComponents();
+        
+        
+//        String str = "Helloooo";
+//        String plainText = "Tran Tuan Vu";
+//        
+//        SecretKey originalKey = new SecretKeySpec(str.getBytes(), 0,str.getBytes().length , "DES");
+//        System.out.println(originalKey.getEncoded().length);
+////        
+//        byte[] fileContent = plainText.getBytes();
+//        Cipher desCipher;
+//        try {
+//            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+//            desCipher.init(Cipher.ENCRYPT_MODE, originalKey);
+//            byte[] textEncrypted = desCipher.doFinal(fileContent);
+//            String out = "";
+//            
+//            for(int i = 0; i < textEncrypted.length; i++){
+//                out+= (char)  textEncrypted[i];
+//            }           
+//            System.out.println(out);
+//            
+//            
+//            
+//            byte[]textArr = new byte[out.length()];
+//            for(int i = 0; i < textArr.length; i++){
+//                textArr[i] = (byte) out.charAt(i);
+//            }
+//            
+//            String codeKey = encodeKey(originalKey);
+////            
+//            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+////            
+//            desCipher.init(Cipher.DECRYPT_MODE, originalKey);
+////            
+//            byte[] textDecrypted = desCipher.doFinal(textArr);
+////            
+//            String outDE = "";
+//            for(int i = 0; i < textDecrypted.length; i++){
+//                outDE+= (char) textDecrypted[i];
+//            }
+//            System.out.println("de:"+outDE);
+//
+//            
+//            
+//        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+//            Logger.getLogger(frmDES.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//            SecretKey srk = generateKey();
+//            System.out.println(srk.getEncoded().length);
+//        String a = "0110100001100101011011000110110001101111011100110111001101110011";
+//
+//        String[] s = a.split("");
+//        String[] IP = IPPerformed(s);
+//        twoHavlesPT(IP);
+//        String[] pc1 =PC1Performed(s);
+//        setCD(pc1);
+//        Round();
+//        swapLeftAndRightPlainText();
+//        String cipher = finalPermutationPerform(convertArray(merge(LPT, RPT)));
+//        System.out.println(cipher);
+        
+        
+        
+            
+//        
+//            SecretKey srk = generateKey();
+//            System.out.println(srk.getEncoded().length);
+
+
+
 
 //        String a = "0110100001100101011011000110110001101111011100110111001101110011";
 //
@@ -678,11 +749,32 @@ public class frmDES extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPlainTextActionPerformed
 
     private void btnEncryptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncryptionActionPerformed
-        // TODO add your handling code here:
+        String plainText = txtPlainText.getText();
+        String key = txtKey.getText();
+        SecretKey secretKey;
+        if(key.isEmpty()){
+            secretKey = generateKey();
+        }
+        else{
+            secretKey = generateKey(key);
+        }
+        txtKey1.setText(encodeKey(secretKey));
+        String cipherText = encryptText(plainText, secretKey);
+        txtCipher.setText(cipherText);
     }//GEN-LAST:event_btnEncryptionActionPerformed
 
     private void btnDecryptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptionActionPerformed
-        // TODO add your handling code here:
+        String cipherText = txtCipher.getText();
+        String key = txtKey.getText();
+        if(key.isEmpty() || cipherText.isEmpty()) return;
+        SecretKey secretKey = decodeKey(key);
+        String plainText = decryptText(cipherText, secretKey);
+        txtPlainText.setText(plainText);
+//        SecretKey key = generateKey();
+//        String encode = encodeKey(key);
+//        SecretKey deKey = decodeKey(encode);
+//        System.out.println(key);
+//        System.out.println(deKey);
     }//GEN-LAST:event_btnDecryptionActionPerformed
 
     private void txtKey1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKey1ActionPerformed
@@ -761,6 +853,7 @@ public class frmDES extends javax.swing.JFrame {
     }
 
     // <editor-fold defaultstate="collapsed" desc="File">
+    //Random key
     private SecretKey generateKey( ){
         KeyGenerator keygenerator;
         try {
@@ -774,10 +867,18 @@ public class frmDES extends javax.swing.JFrame {
         }
         return null;
     }
+    //Generate key with input from user
+    private SecretKey generateKey(String input){
+        SecretKey key = new SecretKeySpec(input.getBytes(), "DES");
+        return key;
+    }
     private String encodeKey ( SecretKey key ){
         String encodedKey = "";
+        
         if(key != null){
-            encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+//            encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+        encodedKey = Base64.getMimeEncoder().encodeToString(key.getEncoded());
+            System.out.println("en: "+encodedKey.length());
         }
         return encodedKey;
     }
@@ -787,14 +888,18 @@ public class frmDES extends javax.swing.JFrame {
         if(!encodeKey.isEmpty()){
             byte[] decodedKey;
             
-            decodedKey = Base64.getDecoder().decode(encodeKey);
+//            decodedKey = Base64.getDecoder().decode(encodeKey);
+               decodedKey = Base64.getMimeDecoder().decode(encodeKey);
+            
             
             SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");//change here
-            
+            System.out.println(decodedKey.length);
+            System.out.println(encodeKey.length());
             return  originalKey;
         }
         return null;
     }
+    //encrypt file
     private byte[] encryptFile(File file, SecretKey key){
         
         Cipher desCipher;
@@ -811,7 +916,7 @@ public class frmDES extends javax.swing.JFrame {
         }
         return  null;
     }
-    
+    //decrypt file
     private byte[] decryptFile(File file, SecretKey key){
         Cipher desCipher;
         try {
@@ -829,6 +934,66 @@ public class frmDES extends javax.swing.JFrame {
             System.out.println("err");
         }
         return  null;
+    }
+    //encrypt text(use encrypt text from input)
+    private String encryptText(String text, SecretKey key){
+        Cipher desCipher;
+        String cipherText = "";
+        try {
+            byte[] plainText = text.getBytes();
+            
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            
+            desCipher.init(Cipher.ENCRYPT_MODE, key);
+            
+            byte[] textDecrypted = desCipher.doFinal(plainText);
+            
+            cipherText = convertByteArrayToString(textDecrypted);//function define in line 957
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            System.out.println("err");
+        }
+        return  cipherText;
+    }
+    //Decrypt text(use decrypt text from input)
+    private String decryptText(String text, SecretKey key){
+        Cipher desCipher;
+        String plainText = "";
+        
+        byte[]textArr = convertStringToByteArray(text);//function define in line 965
+        
+        
+
+        try {
+            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            
+            desCipher.init(Cipher.DECRYPT_MODE, key);            
+            
+            byte[] textDecrypted = desCipher.doFinal(textArr);
+            
+            plainText = convertByteArrayToString(textDecrypted);
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(frmDES.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return plainText;
+    }
+    private String convertByteArrayToString(byte[] array){
+        String result = "";
+        
+        for(int i = 0; i < array.length; i++){
+            result += (char) array[i];
+        }
+        
+        return result;
+    }
+    private byte [] convertStringToByteArray(String str){
+        
+        byte[]array = new byte[str.length()];
+        for(int i = 0; i < array.length; i++){
+            array[i] = (byte) str.charAt(i);
+        }
+        return array;
     }
     
     private void demo(){

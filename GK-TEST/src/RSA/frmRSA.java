@@ -11,11 +11,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Formatter;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -38,6 +48,8 @@ public class frmRSA extends javax.swing.JFrame {
      */
     public frmRSA() {
         initComponents();
+        
+        
     }
 
     /**
@@ -406,20 +418,20 @@ public class frmRSA extends javax.swing.JFrame {
     }
     
     // <editor-fold defaultstate="collapsed" desc="File">
-    private SecretKey generateKey( ){
-        KeyGenerator keygenerator;
+    private KeyPair generateKey( ){
         try {
-            keygenerator = KeyGenerator.getInstance("DES");//change here
-            SecretKey Key  = keygenerator.generateKey();
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(1024);
+            KeyPair pair = keyGen.generateKeyPair();
             
-           
-            return Key;
+            return pair;
+            
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("error");
+            Logger.getLogger(frmRSA.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    private String encodeKey ( SecretKey key ){
+    private String encodePublicKey ( PublicKey key ){
         String encodedKey = "";
         if(key != null){
             encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
@@ -427,26 +439,50 @@ public class frmRSA extends javax.swing.JFrame {
         return encodedKey;
     }
     
-    private SecretKey decodeKey (String encodeKey ){
+    private PublicKey decodePublicKey (String encodeKey ){
         
-        if(!encodeKey.isEmpty()){
-            byte[] decodedKey;
-            
-            decodedKey = Base64.getDecoder().decode(encodeKey);
-            
-            SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");//change here
-            
-            return  originalKey;
+        PublicKey publicKey = null;
+        try{
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(encodeKey.getBytes()));
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            publicKey = keyFactory.generatePublic(keySpec);
+            return publicKey;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
         }
-        return null;
+        return publicKey;
     }
-    private byte[] encryptFile(File file, SecretKey key){
+    private String encodePrivateKey ( PrivateKey key ){
+        String encodedKey = "";
+        if(key != null){
+            encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+        }
+        return encodedKey;
+    }
+    private PrivateKey decodePrivateKey(String key){
+        PrivateKey privateKey = null;
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(key.getBytes()));
+        KeyFactory keyFactory = null;
+        try {
+            keyFactory = KeyFactory.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        try {
+            privateKey = keyFactory.generatePrivate(keySpec);
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        return privateKey;
+    }
+    
+    private byte[] encryptFile(File file, PublicKey key){
         
         Cipher desCipher;
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             
-            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            desCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             desCipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] textEncrypted = desCipher.doFinal(fileContent);
             return  textEncrypted;
@@ -457,12 +493,12 @@ public class frmRSA extends javax.swing.JFrame {
         return  null;
     }
     
-    private byte[] decryptFile(File file, SecretKey key){
+    private byte[] decryptFile(File file, PrivateKey key){
         Cipher desCipher;
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             
-            desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");//change here
+            desCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             
             desCipher.init(Cipher.DECRYPT_MODE, key);
             
@@ -475,31 +511,81 @@ public class frmRSA extends javax.swing.JFrame {
         }
         return  null;
     }
-    
-    private void demo(){
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(this);
-        File f = chooser.getSelectedFile();
-        
+    private String encryptText(String text, PublicKey key){
+        Cipher cipher;
+        String cipherText="";
         try {
+            cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            byte[]cipherArray = cipher.doFinal(text.getBytes());
+            cipherText = convertByteArrayToString(cipherArray);
             
-            String extension = f.toString().split("[.]")[1];
-            
-            
-            SecretKey key = generateKey();
-            
-            byte[] textEncrypt = encryptFile(f, key);
-            
-            FileUtils.writeByteArrayToFile(new File("E:\\encrypt."+extension), textEncrypt);
-            
-            byte[] textDecrypt = decryptFile(new File("E:\\encrypt."+extension), key);
-            
-            FileUtils.writeByteArrayToFile(new File("E:\\decrypt."+extension), textDecrypt);
-            
-        } catch (IOException ex) {
-            System.out.println("err");
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(frmRSA.class.getName()).log(Level.SEVERE, null, ex);
         }
+	
+	return cipherText;
     }
+    private String decryptText (String text, PrivateKey key){
+        Cipher cipher;
+        String plainText="";
+        byte[]textArr = convertStringToByteArray(text);
+        try {
+            cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            
+            byte[]cipherArray = cipher.doFinal(textArr);
+            
+            plainText = convertByteArrayToString(cipherArray);
+            
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(frmRSA.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	
+	return plainText;
+    }
+    private String convertByteArrayToString(byte[] array){
+        String result = "";
+        
+        for(int i = 0; i < array.length; i++){
+            result += (char) array[i];
+        }
+        
+        return result;
+    }
+    private byte [] convertStringToByteArray(String str){
+        
+        byte[]array = new byte[str.length()];
+        for(int i = 0; i < array.length; i++){
+            array[i] = (byte) str.charAt(i);
+        }
+        return array;
+    }
+//    private void demo(){
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.showOpenDialog(this);
+//        File f = chooser.getSelectedFile();
+//        
+//        try {
+//            
+//            String extension = f.toString().split("[.]")[1];
+//            
+//            
+//            SecretKey key = generateKey();
+//            
+//            byte[] textEncrypt = encryptFile(f, key);
+//            
+//            FileUtils.writeByteArrayToFile(new File("E:\\encrypt."+extension), textEncrypt);
+//            
+//            byte[] textDecrypt = decryptFile(new File("E:\\encrypt."+extension), key);
+//            
+//            FileUtils.writeByteArrayToFile(new File("E:\\decrypt."+extension), textDecrypt);
+//            
+//        } catch (IOException ex) {
+//            System.out.println("err");
+//        }
+//    }
     // </editor-fold>  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
