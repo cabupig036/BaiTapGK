@@ -644,6 +644,11 @@ public class frmDES extends javax.swing.JFrame {
         });
 
         jButton2.setText("Generate Key");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Key Generate");
 
@@ -657,7 +662,7 @@ public class frmDES extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel5.setText("DES");
 
-        jButton3.setText("Open");
+        jButton3.setText("Save");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -731,9 +736,9 @@ public class frmDES extends javax.swing.JFrame {
                     .addComponent(jButton3)
                     .addComponent(lblFileChoose))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEncryption)
-                    .addComponent(btnDecryption))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDecryption)
+                    .addComponent(btnEncryption, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -816,6 +821,20 @@ public class frmDES extends javax.swing.JFrame {
         jfrm2.setVisible(true);
         
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String plainText = txtPlainText.getText();
+        String key = txtKey.getText();
+        SecretKey secretKey;
+        if(key.isEmpty()){
+            secretKey = generateKey();
+        }
+        else{
+            secretKey = generateKey(key);
+        }
+        txtKey1.setText(encodeKey(secretKey));
+       
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

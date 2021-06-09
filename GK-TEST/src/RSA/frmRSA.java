@@ -172,7 +172,7 @@ public class frmRSA extends javax.swing.JFrame {
             }
         });
 
-        btnSave.setText("Open");
+        btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
